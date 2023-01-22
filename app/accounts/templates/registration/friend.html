@@ -1,0 +1,197 @@
+{% extends 'registration/base.html'%} {% block content %}
+
+<div id="div_header">
+  <h1 class="profile">友達リスト</h1>
+</div>
+
+<div style="padding-left: 200px; padding-top: 50px">
+  <table id="sample" class="design12">
+    <tr>
+      <th>アイコン</th>
+      <th>名前</th>
+    </tr>
+  </table>
+
+  <br />
+  <form
+    action=""
+    onsubmit="onsubmitButton_find_friend(); return false;"
+    style="width: 90%"
+    class="row g-3"
+  >
+    <label for="input_name" class="form-label" style="font-weight: bold"
+      >友達検索：友達の名前を入力してみてね</label
+    >
+    <input
+      type="text"
+      id="input_name"
+      placeholder="Enter User name"
+      class="form-control"
+    />
+    <input type="submit" value="検索" class="button button-login" />
+  </form>
+</div>
+
+<style>
+  .button {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.5em 1.2em;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    max-width: 100px;
+  }
+  .button-login {
+    font-weight: bold;
+    color: #fff;
+    background: #00b5ad;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+  }
+  #div_header {
+    padding-right: 700px;
+  }
+  .design12 {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 20px;
+  }
+
+  .design12 th {
+    padding: 10px;
+    border: solid 1px #ffffff;
+    background: #778ca3;
+    color: #ffffff;
+  }
+  .design12 td {
+    background: #0eb9b1;
+    padding: 10px;
+    border: solid 1px #ffffff;
+    color: #ffffff;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+  a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+</style>
+
+<script>
+  let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  const g_socket = new WebSocket(
+    ws_scheme + "://" + window.location.host + "/ws/friend_list/"
+  );
+  const g_elementListMessage = document.getElementById("room_list");
+  const g_elementInputUserName = document.getElementById("input_name");
+
+  function onsubmitButton_find_friend() {
+    let strInputUserName = g_elementInputUserName.value;
+    g_socket.send(
+      JSON.stringify({
+        data_type: "find_friend",
+        input_name: strInputUserName,
+      })
+    );
+  }
+
+  g_socket.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+
+    let element_ul = document.getElementById("friend_list");
+    let element_sample = document.getElementById("sample");
+
+    if (data["data_type"] == "find_friend") {
+      let element_td2 = document.createElement("td");
+      let element_td = document.createElement("td");
+      let element_tr = document.createElement("tr");
+      let element_a = document.createElement("a");
+      element_a.innerText = data["friend_name"];
+      element_a.setAttribute("href", data["friend_name"]);
+      element_td.appendChild(element_a);
+
+      let element_img = document.createElement("img");
+      let thumbnail = data["thumbnail"];
+      thumbnail = thumbnail.replace(/^../g, "");
+      thumbnail = thumbnail.replace(/.$/g, "");
+      let decoded = atob(thumbnail);
+      element_img.setAttribute("src", "/media/" + decoded);
+      element_img.setAttribute("width", 50);
+      element_img.setAttribute("height", 50);
+
+      element_img.setAttribute("style", "border-radius:50%; margin:0 auto; ");
+      element_td2.appendChild(element_img);
+
+      element_tr.appendChild(element_td2);
+      element_tr.appendChild(element_td);
+
+      element_sample.appendChild(element_tr);
+    } else {
+      data_num = Object.keys(data["name_list"]).length;
+
+      (async () => {
+        for (let i = 0; i < data_num; i++) {
+          await promise(i);
+        }
+      }).call();
+
+      function promise(i) {
+        return new Promise((resolve) => {
+          let element_td2 = document.createElement("td");
+          let element_td = document.createElement("td");
+          let element_tr = document.createElement("tr");
+          let element_a = document.createElement("a");
+          element_a.innerText = data["name_list"][i];
+          element_a.setAttribute("href", data["name_list"][i]);
+          element_td.appendChild(element_a);
+
+          let element_img = document.createElement("img");
+          let thumbnail = data["img_list"][i];
+          thumbnail = thumbnail.replace(/^../g, "");
+          thumbnail = thumbnail.replace(/.$/g, "");
+          let decoded = atob(thumbnail);
+          element_img.setAttribute("src", "/media/" + decoded);
+          element_img.setAttribute("width", 50);
+          element_img.setAttribute("height", 50);
+
+          element_img.setAttribute(
+            "style",
+            "border-radius:50%; margin:0 auto; "
+          );
+          element_td2.appendChild(element_img);
+
+          element_tr.appendChild(element_td2);
+          element_tr.appendChild(element_td);
+
+          element_sample.appendChild(element_tr);
+          resolve();
+        });
+      }
+    }
+  };
+</script>
+{% endblock %}

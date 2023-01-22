@@ -1,0 +1,411 @@
+<!--Outlinedを読み込む場合-->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+
+<!--Roundedを読み込む場合-->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+
+<!--Sharpを読み込む場合は-->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+{% extends 'registration/base.html'%} {% block content %}
+
+<style>
+  h1 {
+    position: relative;
+    display: inline-block;
+    padding: 20px 55px;
+  }
+  h1:before,
+  h1:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    width: 45px;
+    height: 1px;
+    background-color: black;
+  }
+
+  h1:before {
+    left: 0;
+  }
+  h1:after {
+    right: 0;
+  }
+  form {
+    max-width: 1200px;
+  }
+  .text {
+    font-size: 20px;
+  }
+
+  .content {
+    padding-top: 30px;
+    max-width: 900px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .button {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.5em 1.2em;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+  }
+  .button-login {
+    font-weight: bold;
+    color: #fff;
+    background: #00b5ad;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .title {
+    padding-top: 10px;
+    padding-right: 600px;
+  }
+  .status {
+    position: relative;
+    padding: 1rem 2rem;
+    border-bottom: 6px solid #00b5ad;
+  }
+
+  .status:before {
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 20%;
+    height: 6px;
+    content: "";
+    background: #ffe692;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+  }
+  .double_arrow {
+    font-size: 50px;
+  }
+</style>
+<div class="title">
+  <h2 class="profile">プロフィール</h2>
+</div>
+<br />
+<div style="display: flex; padding-left: 0px">
+  <div style="width: 600; padding-top: 50px">
+    <div
+      id="div_name"
+      class="status"
+      style="max-width: 900px; display: flex; align-items: flex-end"
+    >
+      <h2>なまえ</h2>
+      <span class="material-symbols-outlined double_arrow">double_arrow</span>
+    </div>
+    <div id="div_email" class="content status">
+      <h2>メール</h2>
+      <span class="material-symbols-outlined double_arrow">double_arrow</span>
+    </div>
+
+    <div id="div_status" class="content status">
+      <h2>ステータス</h2>
+      <span class="material-symbols-outlined double_arrow">double_arrow</span>
+    </div>
+  </div>
+  <div
+    style="
+      width: 500;
+      border: 5px solid #00b5ad;
+      border-radius: 5%;
+      margin-right: 40px;
+    "
+  >
+    <div style="display: flex; padding-top: 3%; justify-content: flex-end">
+      <span class="material-symbols-outlined" id="radio_button">
+        radio_button_checked
+      </span>
+      <div id="div_profile_user_status" style="padding-right: 5%"></div>
+    </div>
+    <div style="padding: 1rem 5.5rem 1rem 5.5rem; height: 60%">
+      <div id="div_profile_thumbnail" style="padding-left: 100px"></div>
+      <div
+        id="div_profile_name"
+        style="
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.2rem;
+          margin: 1rem auto 0rem;
+          letter-spacing: 0.4rem;
+        "
+      ></div>
+    </div>
+    <div
+      id="div_profile_comment"
+      style="
+        line-height: 2rem;
+        text-align: center;
+        padding-top: -10%;
+        padding-bottom: 20%;
+      "
+    ></div>
+  </div>
+</div>
+
+<br />
+<form
+  action=""
+  onsubmit="onsubmitButton_update(); return false;"
+  style="width: 100%; margin: 0px; font-size: 20px; font-weight: bold"
+  class="row g-3"
+>
+  <div class="col">
+    <label for="input_name" class="form-label">名前</label>
+    <input
+      type="text"
+      id="input_name"
+      placeholder="Enter User name"
+      class="form-control"
+    /><br />
+  </div>
+  <div class="col">
+    <label for="input_email" class="form-label">メールアドレス</label>
+    <input
+      type="text"
+      id="input_email"
+      placeholder="Enter email"
+      class="form-control"
+    /><br />
+  </div>
+  <div class="col-12">
+    <label for="input_thumbnail" class="form-label"
+      >画像を選択してください(.png, .jpg, .jpegの画像が選択可能)</label
+    >
+    <input
+      type="file"
+      id="input_thumbnail"
+      accept=".png, .jpg, .jpeg"
+      class="form-control"
+    /><br />
+  </div>
+  <div class="col">
+    <label for="input_comment" class="form-label">コメント</label>
+    <input
+      type="text"
+      id="input_comment"
+      placeholder="Enter comment"
+      class="form-control"
+    /><br />
+  </div>
+  <div class="col">
+    <label for="status" class="form-label">ステータス選択してください</label>
+    <select id="status" class="form-select">
+      <option value="A">オンライン</option>
+      <option value="B">オフライン</option>
+      <option value="C">退席中</option>
+    </select>
+  </div>
+  <br />
+  <div class="col-12">
+    <input type="submit" value="更新" class="button button-login" />
+  </div>
+</form>
+
+<script>
+  let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  const g_socket = new WebSocket(
+    ws_scheme + "://" + window.location.host + "/ws/profile/"
+  );
+
+  const element_profile_img = document.createElement("img");
+
+  const element_profile_name = document.createElement("h2");
+
+  const element_profile_status = document.createElement("h3");
+  element_profile_status.classList.add("fst-italic");
+  const element_profile_comment = document.createElement("h3");
+  element_profile_comment.classList.add("fst-italic");
+
+  const element_email = document.createElement("h2");
+
+  const element_name = document.createElement("h2");
+
+  const element_status = document.createElement("h2");
+
+  const element_div_name = document.getElementById("div_name");
+  const element_div_email = document.getElementById("div_email");
+
+  const element_div_status = document.getElementById("div_status");
+
+  const element_div_profile_img = document.getElementById(
+    "div_profile_thumbnail"
+  );
+  const element_div_profile_status = document.getElementById(
+    "div_profile_user_status"
+  );
+  const element_div_profile_comment = document.getElementById(
+    "div_profile_comment"
+  );
+  const element_div_profile_name = document.getElementById("div_profile_name");
+  const element_span_radio_button = document.getElementById("radio_button");
+
+  const status_select = document.getElementById("status");
+  status_select.options[0].selected = true;
+  const input_name = document.getElementById("input_name");
+  const input_email = document.getElementById("input_email");
+  const input_thumbnail = document.getElementById("input_thumbnail");
+  const input_comment = document.getElementById("input_comment");
+
+  function onsubmitButton_update() {
+    let status = status_select.value;
+    let name = input_name.value;
+    let email = input_email.value;
+    let comment = input_comment.value;
+
+    let imageFile = input_thumbnail.files[0];
+    if (imageFile != undefined) {
+      let imageURL = window.URL.createObjectURL(imageFile);
+
+      const imageElement = new Image();
+      imageElement.src = imageURL;
+
+      imageElement.onload = function () {
+        // canvas要素を作成し、img要素を描画
+        const canvasElement = document.createElement("canvas");
+        canvasElement.width = imageElement.width;
+        canvasElement.height = imageElement.height;
+        const canvasContext = canvasElement.getContext("2d");
+        canvasContext.drawImage(imageElement, 0, 0);
+        // canvas要素をbase64形式に変換
+        base64 = canvasElement.toDataURL("image/jpg").replace(/^.*,/, "");
+        console.log(base64);
+
+        g_socket.send(
+          JSON.stringify({
+            data_type: "submit",
+            status: status,
+            name: name,
+            email: email,
+            comment: comment,
+            image: base64,
+          })
+        );
+      };
+    } else {
+      g_socket.send(
+        JSON.stringify({
+          data_type: "submit",
+          status: status,
+          name: name,
+          email: email,
+          comment: comment,
+        })
+      );
+    }
+  }
+
+  g_socket.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+
+    if (data["data_type"] == "reload") {
+      location.reload(true);
+    } else {
+      let strUserName = data["username"];
+      let strEmail = data["email"];
+      let thumbnail = data["thumbnail"];
+      let user_status = data["user_status"];
+      let comment = data["comment"];
+
+      thumbnail = thumbnail.replace(/^../g, "");
+      thumbnail = thumbnail.replace(/.$/g, "");
+
+      let decoded = atob(thumbnail);
+
+      element_profile_img.setAttribute("src", "/media/" + decoded);
+      element_profile_img.setAttribute("width", 120);
+      element_profile_img.setAttribute("height", 120);
+      element_profile_img.setAttribute("display", "block");
+
+      element_profile_img.setAttribute(
+        "style",
+        "border-radius:50%; margin:0 auto; "
+      );
+      element_name.innerText = strUserName;
+      element_profile_name.innerText = strUserName;
+      element_email.innerText = strEmail;
+      let user_status_text = "";
+
+      if (user_status == "online") {
+        user_status_text = "オンライン";
+      } else if (user_status == "offline") {
+        user_status_text = "オフライン";
+      } else {
+        user_status_text = "忙しい";
+      }
+      element_status.innerText = user_status_text;
+      element_profile_status.innerText = user_status_text;
+      if (user_status == "online") {
+        element_span_radio_button.setAttribute(
+          "style",
+          "color:green; padding-top: 2%;"
+        );
+      } else if (user_status == "offline") {
+        element_span_radio_button.setAttribute(
+          "style",
+          "color:red; padding-top: 2%;"
+        );
+      } else {
+        element_span_radio_button.setAttribute(
+          "style",
+          "color:orange; padding-top: 2%;"
+        );
+      }
+
+      if (comment == "") {
+        element_profile_comment.innerText = "コメントはありません";
+      } else {
+        element_profile_comment.innerText = comment;
+      }
+
+      element_div_email.appendChild(element_email);
+      element_div_name.appendChild(element_name);
+      element_div_status.appendChild(element_status);
+
+      element_div_profile_img.appendChild(element_profile_img);
+      element_div_profile_status.appendChild(element_profile_status);
+      element_div_profile_comment.appendChild(element_profile_comment);
+      element_div_profile_name.appendChild(element_profile_name);
+    }
+  };
+</script>
+
+{% endblock %}

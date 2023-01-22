@@ -1,0 +1,13 @@
+#gitignore
+
+data/
+docker-entrypoint-initdb.d
+app/db.sqlite3
+app/chat/migrations
+app/accounts/migrations
+app/media_local/images/thumbnail
+app/chat/static/image
+.vscode
+.vscode/settings.json
+app/fixtures
+database.txt

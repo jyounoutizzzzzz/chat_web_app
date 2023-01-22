@@ -1,0 +1,43 @@
+{% extends 'registration/base.html'%} {% load static%} {% block content %}
+<style>
+  .top_img {
+    width: 500px;
+    height: 400px;
+  }
+  h1 {
+    text-align: center;
+    position: relative;
+    padding: 0.25em 0.3em;
+    border-top: solid 2px black;
+    border-bottom: solid 2px black;
+    color: black;
+  }
+  h1:before,
+  h1:after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    width: 2px;
+    height: -webkit-calc(100% + 14px);
+    height: calc(100% + 14px);
+    background-color: black;
+  }
+  h1:before {
+    left: 7px;
+  }
+  h1:after {
+    right: 7px;
+  }
+  .text {
+    padding-left: 100px;
+    padding-top: 100px;
+  }
+</style>
+
+<div style="display: flex">
+  <img src="{% static "image/10885.png" %}" class="top_img" >
+  <div class="text">
+    <h1>誰でも簡単に使えます<br />みんなでアプリを始めよう！</h1>
+  </div>
+</div>
+{% endblock %}
