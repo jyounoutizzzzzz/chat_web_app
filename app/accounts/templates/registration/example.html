@@ -1,0 +1,82 @@
+{% extends 'registration/base.html'%}
+
+{% block content %}
+{% load static %}
+<style>
+.title {
+ position: relative;
+  padding: 1.5rem 2rem 1.5rem 160px;
+  border-bottom: 3px solid #000;
+}
+
+.title span {
+  font-family: sans-serif;
+  color: #00b5ad;
+  font-size: 100px;
+  font-size: 10rem;
+  line-height: 1;
+  position: absolute;
+  bottom: 0rem;
+  left: 0;
+}
+.title_div{
+    padding-top: 100px;
+}
+img{
+    max-width: 500px;
+    max-height: 500px;
+}
+</style>
+
+<div class="title_div"><h2 class="title"><span>01</span>アカウントを作ってみよう!</h2></div>
+<br>
+<h2>ログインページの初めての方をクリック</h2>
+<img src="{% static "image/login1.PNG" %}">
+<img src="{% static "image/login2.PNG" %}">
+<br>
+<h2>アカウントを作成</h2>
+<img src="{% static "image/login3.PNG" %}">
+<br>
+<h2>次回以降はログインページからログイン</h2>
+<img src="{% static "image/login4.PNG" %}">
+
+<div class="title_div"><h2 class="title"><span>02</span>プロフィールを設定してみよう！</h2></div>
+<br>
+<h2>プロフィールページへ移動</h2>
+<img src="{% static "image/profile1.PNG" %}">
+<br>
+<h2>プロフィールを設定して更新ボタンをクリック</h2>
+<img src="{% static "image/profile2.PNG" %}">
+
+<div class="title_div"><h2 class="title"><span>03</span>友達を検索して、追加してみよう！</h2></div>
+<br>
+<h2>友達ページへ移動</h2>
+<img src="{% static "image/friend1.PNG" %}">
+<br>
+<h2>友達の名前を検索してクリック</h2>
+<img src="{% static "image/friend2.PNG" %}">
+<br>
+<h2>友達追加ボタンをクリック</h2>
+<img src="{% static "image/friend3.PNG" %}">
+
+<div class="title_div"><h2 class="title"><span>04</span>メッセージを送ってみよう！</h2></div>
+<h2>友達の名前をクリック</h2>
+<img src="{% static "image/chat1.PNG" %}">
+<br>
+<h2>メッセージボタンをクリック</h2>
+<img src="{% static "image/chat2.PNG" %}">
+<br>
+<h2>メッセージを送信</h2>
+<img src="{% static "image/chat3.PNG" %}">
+<br>
+<h2>次回以降はメッセージページへ移動</h2>
+<img src="{% static "image/chat4.PNG" %}">
+<br>
+<h2>チャットルームをクリック</h2>
+<img src="{% static "image/chat5.PNG" %}">
+<br>
+
+
+    
+
+{% endblock %}

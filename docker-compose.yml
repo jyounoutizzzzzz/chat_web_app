@@ -1,0 +1,42 @@
+# dcoker-compose.yml
+
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "****:****"
+    volumes:
+      - .***:***
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver ****:****"
+    #              celery -A app worker -l info &&
+    environment:
+      - DB_HOST=**
+      - DB_NAME=**
+      - DB_USER=**
+      - DB_PASS=**
+    depends_on:
+      - db
+      - redis
+    container_name: application
+  db:
+    image: postgres:10-alpine
+    environment:
+      - POSTGRES_DB=**
+      - POSTGRES_USER=**
+      - POSTGRES_PASSWORD=**
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    container_name: psql_database
+  redis:
+    image: redis:latest
+    volumes:
+      - ./data/redis:/data
+    container_name: redis_database
+volumes:
+  postgres_volume:
+    external: true

@@ -1,0 +1,67 @@
+{% extends 'registration/base.html'%} {% block content %}
+<style>
+  .text {
+    font-size: 20px;
+    padding-top: 50px;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+  .login {
+    font-weight: bold;
+    color: #fff;
+    background: #00b5ad;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+    width: 100px;
+  }
+</style>
+<div class="row">
+  <div class="col-sm-6">
+    <br />
+    <div style="padding-right: 200px">
+      <h1 class="profile">ユーザ登録</h1>
+    </div>
+    <form method="POST" class="text" novalidate>
+      <div class="form-group">
+        {% csrf_token %} {{ form.non_field_errors }} {% for field in form %}
+        <div class="form-group">
+          <label class="control-label" for="{{ field.name }}"
+            >{{ field.label }}</label
+          >
+          <input
+            type=""
+            class="form-control"
+            name="{{ field.name }}"
+            id="{{ field.name }}"
+          />
+          {{field.errors}}
+        </div>
+        <br />
+        {% endfor %}
+      </div>
+      <button type="submit" class="login">登録</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

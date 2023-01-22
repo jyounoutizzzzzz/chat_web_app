@@ -1,0 +1,81 @@
+{% extends 'registration/base.html'%} {% block content %} {% load static %}
+
+<style>
+  .login {
+    font-weight: bold;
+    color: #fff;
+    background: #00b5ad;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+  }
+  .div {
+    padding-left: 10px;
+  }
+
+  form {
+    max-width: 400px;
+    padding-top: 30px;
+  }
+  .text {
+    font-size: 20px;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+
+  .sign-button {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.1em 1.2em;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    color: #999;
+    font-weight: bold;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+    font-size: 19px;
+  }
+  .sign-div {
+    margin-left: 30px;
+  }
+</style>
+<div style="padding-right: 900px">
+  <h1 class="profile">ログイン</h1>
+</div>
+
+<div class="div">
+  <br />
+  <form action="{% url 'login'%}" method="post" class="row g-3 text">
+    {% csrf_token %} {{ form.username.label }} {{ form.username }}
+    <br />
+    {{ form.password.label }} {{ form.password }}
+    <div style="display: flex">
+      <p><input type="submit" value="ログイン" class="login" /></p>
+      <div class="sign-div">
+        <a href="{% url 'accounts:signup'%}" class="sign-button">初めての方</a>
+      </div>
+    </div>
+  </form>
+</div>
+<script></script>
+{% endblock %}

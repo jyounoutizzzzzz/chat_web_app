@@ -1,0 +1,11 @@
+Django==3.2
+psycopg2-binary
+django-redis==5.2.0
+celery
+django-celery-results
+django-rest-framework 
+django-widgets-improved 
+Pillow
+channels-redis
+channels
+daphne

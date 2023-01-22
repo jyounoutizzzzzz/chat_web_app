@@ -1,0 +1,114 @@
+{% extends 'main/base.html'%} {% block content %} {% load static %}
+<style>
+  .design12 {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .design12 th {
+    padding: 10px;
+    border: solid 1px #ffffff;
+    background: #778ca3;
+    color: #ffffff;
+  }
+  .design12 td {
+    background: #0eb9b1;
+    padding: 10px;
+    border: solid 1px #ffffff;
+    color: #ffffff;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+  a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+</style>
+
+<h1 class="profile">メッセージリスト</h1>
+
+<div style="padding-top: 50px">
+  <table class="design12" id="sample" style="font-size: 20px">
+    <tr>
+      <th>友達</th>
+      <th>チャット</th>
+    </tr>
+  </table>
+</div>
+
+<script>
+  let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  const g_socket = new WebSocket(
+    ws_scheme + "://" + window.location.host + "/ws/list/"
+  );
+  g_socket.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+
+    data_num = Object.keys(data["name_list"]).length;
+    let element_sample = document.getElementById("sample");
+    (async () => {
+      for (let i = 0; i < data_num; i++) {
+        await promise(i);
+      }
+    }).call();
+
+    function promise(i) {
+      return new Promise((resolve) => {
+        let element_td2 = document.createElement("td");
+        let element_td = document.createElement("td");
+        let element_tr = document.createElement("tr");
+        let element_a = document.createElement("a");
+        let element_talk = document.createElement("a");
+        element_a.innerText = data["name_list"][i];
+        element_talk.innerText = data["room_list"][i];
+        element_talk.setAttribute(
+          "href",
+          "../" + data["room_list"][i] + "%3Fname=" + data["self_name"][0]
+        );
+        element_a.setAttribute("style", "margin-right:100px;");
+        element_td2.appendChild(element_a);
+        element_td.appendChild(element_talk);
+        let element_img = document.createElement("img");
+        let thumbnail = data["img_list"][i];
+        thumbnail = thumbnail.replace(/^../g, "");
+        thumbnail = thumbnail.replace(/.$/g, "");
+        let decoded = atob(thumbnail);
+        element_img.setAttribute("src", "/media/" + decoded);
+        element_img.setAttribute("width", 50);
+        element_img.setAttribute("height", 50);
+
+        element_img.setAttribute("style", "border-radius:50%; margin:0 auto; ");
+        element_td2.appendChild(element_img);
+
+        element_tr.appendChild(element_td2);
+        element_tr.appendChild(element_td);
+
+        element_sample.appendChild(element_tr);
+        resolve();
+      });
+    }
+  };
+</script>
+{% endblock %}

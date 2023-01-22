@@ -1,0 +1,309 @@
+<!-- chat/templates/chat/room.html -->
+{% extends 'main/base.html'%} {% block content %} {% load static %}
+
+<style>
+  .flex {
+    display: flex;
+  }
+  .margin {
+    margin-left: 80%;
+    margin-right: 0;
+  }
+
+  .padding {
+    padding-top: 30px;
+  }
+
+  .img {
+    border-radius: 50%;
+    border: 2px solid #00b5ad;
+  }
+  .text {
+    position: relative;
+    margin-bottom: 2em;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    background: #eee;
+  }
+
+  .text:before,
+  .text:after {
+    position: absolute;
+    content: "";
+    border-radius: 50%;
+    background: #eee;
+  }
+
+  .text_left:before {
+    left: 30px;
+    bottom: -15px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .text_left:after {
+    left: 10px;
+    bottom: -30px;
+    width: 15px;
+    height: 15px;
+  }
+  .text_right:before {
+    right: 30px;
+    bottom: -15px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .text_right:after {
+    right: 10px;
+    bottom: -30px;
+    width: 15px;
+    height: 15px;
+  }
+  .chat-box {
+    width: 1100px; /* 横幅を200pxに指定 */
+    height: 1000px; /* 横幅を200pxに指定 */
+    border: 1px solid #000; /* わかりやすくボーダーを引く */
+    overflow-y: scroll; /* 縦方向にスクロール可能にする */
+  }
+  .section {
+    max-height: 500px;
+    padding: 1rem;
+    overflow-y: auto;
+    direction: ltr;
+    scrollbar-color: #d4aa70 #e4e4e4;
+    scrollbar-width: thin;
+  }
+  .section::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  .section::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+  }
+
+  .section::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 6px solid rgba(0, 0, 0, 0.18);
+    border-left: 0;
+    border-right: 0;
+    background-color: #00b5ad;
+  }
+  .flex .display {
+    flex: 0 1 auto;
+  }
+  .flex .display2 {
+    flex: 1 0 auto;
+  }
+  .div_img {
+    margin-left: 100px;
+  }
+  .profile {
+    font-size: 30px;
+    font-size: 3rem;
+    position: relative;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .profile:before {
+    position: absolute;
+    bottom: -10px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 5px;
+    content: "";
+    border-radius: 3px;
+    background: #00b5ad;
+  }
+  .profile:first-letter {
+    font-size: 150%;
+    color: #00b5ad;
+  }
+  .button {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.5em 5em;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+  }
+  .button-login {
+    font-weight: bold;
+    color: #fff;
+    background: #00b5ad;
+    border: 1px #00b5ad solid;
+    border-radius: 3px;
+  }
+  .cp_iptxt {
+    position: relative;
+    width: 60%;
+    margin: 40px 3%;
+  }
+  .cp_iptxt input[type="text"] {
+    font-size: 30px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.3em;
+    transition: 0.3s;
+    letter-spacing: 1px;
+    color: #000000;
+    border: none;
+    border-bottom: 3px solid #ffe692;
+    background: transparent;
+  }
+  .ef input[type="text"]:focus {
+    border-bottom: 3px solid #00b5ad;
+    outline: none;
+  }
+</style>
+
+<h1 id="title" class="profile"></h1>
+<div class="section" id="scrollbar">
+  <ul id="chat-log"></ul>
+</div>
+<div style="display: flex; padding-left: 100px">
+  <div class="cp_iptxt">
+    <label class="ef">
+      <input id="chat-message-input" type="text" size="100" />
+    </label>
+  </div>
+  <div style="padding-top: 65px">
+    <input
+      id="chat-message-submit"
+      type="button"
+      value="送信"
+      class="button button-login"
+    />
+  </div>
+</div>
+
+{{ room_name|json_script:"room-name" }} {{ name|json_script:"name" }}
+<script>
+  const roomName = JSON.parse(document.getElementById("room-name").textContent);
+  const Name = JSON.parse(document.getElementById("name").textContent);
+
+  const chatSocket = new WebSocket(
+    "ws://" + window.location.host + "/ws/chat/" + roomName + "/"
+  );
+  let element_ul = document.getElementById("chat-log");
+  let count = 1;
+  let self_decoded;
+  let friend_decoded;
+
+  let title = roomName.replace(/-/g, "と");
+
+  title = title + "のチャット";
+  title_h1 = document.getElementById("title");
+  title_h1.innerText = title;
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    if (data["datatype"] == "load_image") {
+      let self_image = data["self-image"];
+      self_image = self_image.replace(/^../g, "");
+      self_image = self_image.replace(/.$/g, "");
+      self_decoded = atob(self_image);
+
+      let friend_image = data["friend-image"];
+      friend_image = friend_image.replace(/^../g, "");
+      friend_image = friend_image.replace(/.$/g, "");
+      friend_decoded = atob(friend_image);
+    } else {
+      let element_div = document.createElement("div");
+      let element_margin_div = document.createElement("div");
+      element_margin_div.classList.add("padding");
+
+      element_div.classList.add("flex");
+
+      let element_p = document.createElement("p");
+      let element_sub = document.createElement("p");
+
+      datatime = data.posted_at.replace(/\d{4}-/g, "");
+      datatime = datatime.replace(/.{13}$/g, "");
+      if (Name == data.posted_user) {
+        element_div.style.textAlign = "left";
+        element_p.style.paddingLeft = "5%";
+        element_p.innerText = data.message;
+        element_sub.innerText = data.posted_user + " " + datatime;
+        element_p.style.marginLeft = "50px"; /* 左に余白を設ける */
+
+        element_p.classList.add("text", "text_left");
+      } else {
+        element_div.style.textAlign = "right";
+        element_p.style.paddingRight = "5%";
+        element_p.innerText = data.message;
+        element_sub.innerText = data.posted_user + " " + datatime;
+        element_sub.style.marginLeft = "80%";
+
+        element_p.style.marginRight = "50px"; /* 右に余白を設ける */
+
+        element_p.classList.add("text", "text_right");
+      }
+      count++;
+
+      let element_img = document.createElement("img");
+
+      element_img.setAttribute("width", 75);
+      element_img.setAttribute("height", 75);
+
+      element_img.classList.add("img");
+
+      element_div2 = document.createElement("div");
+      if (Name == data.posted_user) {
+        element_img.setAttribute("src", "/media/" + self_decoded);
+        element_div.appendChild(element_img);
+        element_div.appendChild(element_p);
+
+        element_margin_div.appendChild(element_div);
+
+        element_ul.append(element_margin_div);
+        element_ul.append(element_sub);
+        let scrollbar = document.getElementById("scrollbar");
+
+        scrollbar.scrollTo(0, scrollbar.scrollHeight);
+      } else {
+        element_img.setAttribute("src", "/media/" + friend_decoded);
+        element_div.appendChild(element_div2);
+        element_div.appendChild(element_p);
+        element_div.appendChild(element_img);
+        element_p.classList.add("display");
+        element_img.classList.add("display");
+        element_div2.classList.add("display2");
+
+        element_margin_div.appendChild(element_div);
+        element_ul.append(element_margin_div);
+        element_ul.append(element_sub);
+        let scrollbar = document.getElementById("scrollbar");
+        scrollbar.scrollTo(0, scrollbar.scrollHeight);
+      }
+    }
+  };
+
+  chatSocket.onclose = function (e) {
+    console.error("Chat socket closed unexpectedly");
+  };
+
+  document.querySelector("#chat-message-input").focus();
+  document.querySelector("#chat-message-input").onkeyup = function (e) {
+    if (e.keyCode === 13) {
+      // enter, return
+      document.querySelector("#chat-message-submit").click();
+    }
+  };
+
+  document.querySelector("#chat-message-submit").onclick = function (e) {
+    const messageInputDom = document.querySelector("#chat-message-input");
+    const message = messageInputDom.value;
+    chatSocket.send(
+      JSON.stringify({
+        message: message,
+      })
+    );
+    messageInputDom.value = "";
+  };
+</script>
+
+{% endblock %}
