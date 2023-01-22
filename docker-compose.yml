@@ -12,7 +12,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver ****:****"
-    #              celery -A app worker -l info &&
+
     environment:
       - DB_HOST=**
       - DB_NAME=**
